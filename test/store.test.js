@@ -47,7 +47,9 @@ describe('testing store', () => {
             const obj = { testing: [1, 1, 2, 3] };
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
-                const savedPath = path.join(dbPath, 'test');
+
+                const filename = objSaved._id + '.json';
+                const savedPath = path.join(dbPath, filename);
                 const destFile = fs.readFileSync(savedPath, 'utf8');
                 const destObj = JSON.parse(destFile);
                 assert.deepEqual(objSaved.testing, destObj.testing);
@@ -62,6 +64,20 @@ describe('testing store', () => {
                 if(err) return done(err);
                 const idObject = objSaved._id;
                 assert.equal(typeof idObject, 'string');
+                done();
+            });
+        });
+
+        it('saves to path with same name as _id property', done => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+
+                const idObject = objSaved._id;
+                const filename = idObject + '.json';
+                const dirObj = fs.readdirSync(dbPath);
+                assert.equal(filename, dirObj[0]);
                 done();
             });
         });
