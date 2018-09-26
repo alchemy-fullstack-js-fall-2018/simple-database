@@ -31,15 +31,19 @@ const Store = require('../lib/store');
 const rootDirectory = path.join(__dirname, 'animals');
 const store = new Store(rootDirectory);
 
-store.save({ name: 'garfield' });
-  .then(animal => {
-    return store.get(animal._id);
-  })
-  .then(cat => {
-    console.log('got cat', cat);
-    // { name: 'garfield' }
-  })
-  .catch(err => console.log(err));
+store.save({ name: 'garfield' }, (err, animal) => {
+    if(err) {
+        console.error('could not save animal')
+    } else {
+        store.get(animal._id, (err, cat) => {
+            if(err) {
+                console.error('could not get cat')
+            } else {
+                console.log('got cat', cat);
+            }
+        });
+    }
+});
 ```
 
 Here is an example of how the directories and files would be structured:
@@ -62,7 +66,6 @@ The setup for the tests will require that you **start with a "clean" file direct
 This is where `rimraf` and `mkdirp` will come in handy in your [Mocha's before/after hooks](https://mochajs.org/#hooks). 
 
 Your tests will need to handle asynchronous calls.  
-You will need to read about [Mocha and async support](https://mochajs.org/#asynchronous-code). (HINT: return Promises!)
 
 ### `Store`
 
@@ -70,23 +73,24 @@ You will need to read about [Mocha and async support](https://mochajs.org/#async
 * The directory should already exist!
 * The class has the following methods:
 
-1. `.save(<objectToSave>)`
+1. `.save(<objectToSave>, <callback(error, objectThatSaved)>)`
     * Creates a `_id` property for the object (Use third-party npm module like `shortid` or `uuid` or ?)
     * Saves the object to a file (`JSON.stringify`), where the filename is the `_id`. For example, if the id is 3k4e66, the file will be `3k4e66.json`
-    * Return a promise that will resolve to the saved object that has the added `_id` property
-1. `.get(<id>)`
-    * Return a promise that will resolve to the deserialized (`JSON.parse`) object that has that id
-    * If an object with that id does not exists, return `null` from the promise (HINT: catch `ENOENT` errors)
-1. `.remove(<id>)`
+    * akes a callback which takes an error and the deserialized (`JSON.parse`) saved object
+1. `.get(<id>, <callback(error, objectFromFile)>)`
+    * Takes a callback which takes an error and the deserialized (`JSON.parse`) object that has that id
+    * If an object with that id does not exists, objectFromFile is `null`
+1. `.remove(<id>, <callback(error, removedSuccessObject)>)`
     * The store should removes the file of the object with that id.
-    * Return a promise that is called with `{ removed: true }` if object was removed, or `{ removed: false }` 
-    if the id did not exist (HINT: catch `ENOENT` error)
-1. `.getAll()`
-    * Return a promise that is resolved with array of all objects in the directory. (hint: can you use the store's `get(id)` method as part of this?), 
-    or resolves to an empty array `[]` when no objects in the directory.
-1. STRETCH GOAL: `.update(<objectToUpdate>)`
+    * Takes a callback that takes an error and an object `{ removed: true }` if object was removed,
+    or `{ removed: false }` if the id did not exist (HINT: catch `ENOENT` error)
+1. `.getAll(<callback(error, arrayOfObjects)>)`
+    * Takes a callback that takes an error and an array of all objects in the directory. (hint: can you
+    use the store's `get(id)` method as part of this?), or resolves to an empty array `[]` when no
+    objects in the directory.
+1. STRETCH GOAL: `.update(<objectToUpdate>, <callback(error, updatedObject)>)`
     * Write the new object to file, replacing existing object
-    * Return a promise that resolves with the updated object
+    * Takes a callback which takes an error and the deserialized (`JSON.parse`) updated object
 
 TDD the above methods on the `Store` class. Test that the objects are handled correctly by using the API methods, but do **not** test that the files were written to the directory
 
