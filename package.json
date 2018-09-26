@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "shortid": "^2.2.13"
   }
 }
