@@ -76,7 +76,7 @@ Your tests will need to handle asynchronous calls.
 1. `.save(<objectToSave>, <callback(error, objectThatSaved)>)`
     * Creates a `_id` property for the object (Use third-party npm module like `shortid` or `uuid` or ?)
     * Saves the object to a file (`JSON.stringify`), where the filename is the `_id`. For example, if the id is 3k4e66, the file will be `3k4e66.json`
-    * akes a callback which takes an error and the deserialized (`JSON.parse`) saved object
+    * Takes a callback which takes an error and the deserialized (`JSON.parse`) saved object
 1. `.get(<id>, <callback(error, objectFromFile)>)`
     * Takes a callback which takes an error and the deserialized (`JSON.parse`) object that has that id
     * If an object with that id does not exists, objectFromFile is `null`
