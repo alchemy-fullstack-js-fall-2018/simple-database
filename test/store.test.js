@@ -79,6 +79,20 @@ describe('it saves stuff', () => {
 
 describe('it gets stuff', () => {
 
+    beforeEach(done => {
+        rimraf(dbPath, err => {
+            if(err && err.code !== 'ENOENT') done(err);
+            else done();
+        });
+    });
+
+    beforeEach(done => {
+        mkdirp(dbPath, err => {
+            if(err) return done(err);
+            else done();
+        });
+    });
+
     it('gets the object from file', done => {
 
         const store = new Store(dbPath);
@@ -92,11 +106,16 @@ describe('it gets stuff', () => {
                 done();
             });
         });
+    });
 
+    it('returns null if object does not exist', done => {
 
-
-
-
+        const store = new Store(dbPath);
+        store.get('', (err, objFile) => {
+            if(err) return done(err);
+            assert.equal(null, objFile);
+            done();
+        });
     });
 
 
