@@ -10,7 +10,7 @@ const Store = require('../lib/store');
 
 
 
-describe('it saves stuff', () => {
+describe('testing store', () => {
 
     const dbPath = path.join(__dirname, 'simpleDB');
 
@@ -28,19 +28,48 @@ describe('it saves stuff', () => {
         });
     });
 
-    it('saves the file', done => {
+    describe('it saves stuff', () => {
+    
+        it('saves the passed in object', done => {
+    
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            const objJSON = JSON.stringify(obj);
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);    
+                assert.equal(objSaved, objJSON);
+                done();
+            });
+        });
 
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            
-            const savedPath = path.join(dbPath, 'test');
-            const destFile = fs.readFileSync(savedPath, 'utf8');
+        it('returns the saved object', done => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                const savedPath = path.join(dbPath, 'test');
+                const destFile = fs.readFileSync(savedPath, 'utf8');
+                assert.equal(objSaved, destFile);
+                done();
+            });
+        });
+    
+        it('has an _id property', done => {
+    
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
 
-            assert.equal(objSaved, destFile);
-            done();
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                
+                const savedPath = path.join(dbPath, 'test');
+                const destFile = fs.readFileSync(savedPath, 'utf8');
+                
+                assert.equal(objSaved, destFile);
+                done();
+            });
+    
+    
         });
     });
-
 });
