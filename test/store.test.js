@@ -30,42 +30,40 @@ describe('testing store', () => {
 
     describe('it saves stuff', () => {
     
-        it('saves the passed in object', done => {
+        it('returns the passed in object', done => {
     
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
-            const objJSON = JSON.stringify(obj);
             store.save(obj, (err, objSaved) => {
-                if(err) return done(err);    
-                assert.equal(objSaved, objJSON);
+                if(err) return done(err);
+                const testObject = objSaved;
+                assert.deepEqual(testObject['testing'], [1, 1, 2, 3]);
                 done();
             });
         });
 
-        it('returns the saved object', done => {
+        it('saves the object to a file', done => {
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const savedPath = path.join(dbPath, 'test');
                 const destFile = fs.readFileSync(savedPath, 'utf8');
-                assert.equal(objSaved, destFile);
+                const destObj = JSON.parse(destFile);
+                assert.deepEqual(objSaved.testing, destObj.testing);
                 done();
             });
         });
     
-        it('has an _id property', done => {
-    
+        it('gives the object an _id property', done => {
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
-
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
-                assert.equal(objSaved['_id'], true);
+                const idObject = objSaved._id;
+                assert.equal(typeof idObject, 'string');
                 done();
             });
-    
-    
         });
     });
 });
