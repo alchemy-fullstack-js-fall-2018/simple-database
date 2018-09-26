@@ -86,10 +86,9 @@ describe('it gets stuff', () => {
         store.save(obj, (err, objSaved) => {
             if(err) return done(err);
             const idObject = objSaved._id;
-
             store.get(idObject, (err, objFile) => {
                 if(err) return done(err);
-                assert.equal(obj.testing, objFile.testing);
+                assert.deepEqual(obj.testing, objFile.testing);
                 done();
             });
         });
