@@ -12,18 +12,17 @@ const Store = require('../lib/store');
 
 describe('it saves stuff', () => {
 
-    const sourcePath = path.join(__dirname, 'save-dir-source');
-    const destPath = path.join(__dirname, 'save-dir-dest');
+    const dbPath = path.join(__dirname, 'simpleDB');
 
     beforeEach(done => {
-        rimraf(destPath, err => {
+        rimraf(dbPath, err => {
             if(err && err.code !== 'ENOENT') done(err);
             else done();
         });
     });
 
     beforeEach(done => {
-        mkdirp(destPath, err => {
+        mkdirp(dbPath, err => {
             if(err) return done(err);
             else done();
         });
@@ -31,18 +30,14 @@ describe('it saves stuff', () => {
 
     it('saves the file', done => {
 
-        const store = new Store(sourcePath);
+        const store = new Store(dbPath);
         const obj = { testing: [1, 1, 2, 3] };
         store.save(obj, (err, objSaved) => {
             if(err) return done(err);
             
-            const savedPath = path.join(sourcePath, 'test');
-            console.log(savedPath);
-            const destFile = fs.readFileSync(savedPath);
-            console.log(objSaved);
-            console.log(destFile);
+            const savedPath = path.join(dbPath, 'test');
+            const destFile = fs.readFileSync(savedPath, 'utf8');
 
-            // const objJSON = JSON.stringify(objSaved);
             assert.equal(objSaved, destFile);
             done();
         });
