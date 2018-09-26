@@ -33,7 +33,7 @@ const store = new Store(rootDirectory);
 
 store.save({ name: 'garfield' });
   .then(animal => {
-    return store.get(cat._id);
+    return store.get(animal._id);
   })
   .then(cat => {
     console.log('got cat', cat);
