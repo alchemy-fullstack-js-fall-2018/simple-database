@@ -1,0 +1,31 @@
+{
+  "name": "simple-database",
+  "version": "1.0.0",
+  "description": "datbase",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidChhing/simple-database.git"
+  },
+  "author": "davidhchhing@gmail.com (https://github.com/davidchhing)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DavidChhing/simple-database/issues"
+  },
+  "homepage": "https://github.com/DavidChhing/simple-database#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.2",
+    "shortid": "^2.2.13"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "jest": "^23.6.0"
+  }
+}
