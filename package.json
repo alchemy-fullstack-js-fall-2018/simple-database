@@ -9,6 +9,9 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
+  "jest": {
+    "watchPathIgnorePatterns": ["base"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DavidChhing/simple-database.git"
@@ -22,10 +25,11 @@
   "dependencies": {
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2",
-    "shortid": "^2.2.13"
+    "shortid": "^2.2.13",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "eslint": "^5.6.0",
     "jest": "^23.6.0"
-  }
+  } 
 }
