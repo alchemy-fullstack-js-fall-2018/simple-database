@@ -1,3 +1,8 @@
+# db instances
+/test/simpleDB
+
+
+# common stuff
 .DS_Store
 node_modules
 /dist
