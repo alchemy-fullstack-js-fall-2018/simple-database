@@ -8,11 +8,9 @@ const mkdirp = require('mkdirp');
 
 const Store = require('../lib/store');
 
+const dbPath = path.join(__dirname, 'simpleDB');
 
-
-describe('testing store', () => {
-
-    const dbPath = path.join(__dirname, 'simpleDB');
+describe('it saves stuff', () => {
 
     beforeEach(done => {
         rimraf(dbPath, err => {
@@ -28,58 +26,79 @@ describe('testing store', () => {
         });
     });
 
-    describe('it saves stuff', () => {
-    
-        it('returns the passed in object', done => {
-    
-            const store = new Store(dbPath);
-            const obj = { testing: [1, 1, 2, 3] };
-            store.save(obj, (err, objSaved) => {
-                if(err) return done(err);
-                const testObject = objSaved;
-                assert.deepEqual(testObject['testing'], [1, 1, 2, 3]);
-                done();
-            });
-        });
+    it('returns the passed in object', done => {
 
-        it('saves the object to a file', done => {
-            const store = new Store(dbPath);
-            const obj = { testing: [1, 1, 2, 3] };
-            store.save(obj, (err, objSaved) => {
-                if(err) return done(err);
-
-                const filename = objSaved._id + '.json';
-                const savedPath = path.join(dbPath, filename);
-                const destFile = fs.readFileSync(savedPath, 'utf8');
-                const destObj = JSON.parse(destFile);
-                assert.deepEqual(objSaved.testing, destObj.testing);
-                done();
-            });
-        });
-    
-        it('gives the object an _id property', done => {
-            const store = new Store(dbPath);
-            const obj = { testing: [1, 1, 2, 3] };
-            store.save(obj, (err, objSaved) => {
-                if(err) return done(err);
-                const idObject = objSaved._id;
-                assert.equal(typeof idObject, 'string');
-                done();
-            });
-        });
-
-        it('saves to path with same name as _id property', done => {
-            const store = new Store(dbPath);
-            const obj = { testing: [1, 1, 2, 3] };
-            store.save(obj, (err, objSaved) => {
-                if(err) return done(err);
-
-                const idObject = objSaved._id;
-                const filename = idObject + '.json';
-                const dirObj = fs.readdirSync(dbPath);
-                assert.equal(filename, dirObj[0]);
-                done();
-            });
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const testObject = objSaved;
+            assert.deepEqual(testObject['testing'], [1, 1, 2, 3]);
+            done();
         });
     });
+
+    it('saves the object to a file', done => {
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const filename = objSaved._id + '.json';
+            const savedPath = path.join(dbPath, filename);
+            const destFile = fs.readFileSync(savedPath, 'utf8');
+            const destObj = JSON.parse(destFile);
+            assert.deepEqual(objSaved.testing, destObj.testing);
+            done();
+        });
+    });
+
+    it('gives the object an _id property', done => {
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const idObject = objSaved._id;
+            assert.equal(typeof idObject, 'string');
+            done();
+        });
+    });
+
+    it('saves to path with same name as _id property', done => {
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const idObject = objSaved._id;
+            const filename = idObject + '.json';
+            const dirObj = fs.readdirSync(dbPath);
+            assert.equal(filename, dirObj[0]);
+            done();
+        });
+    });
+});
+
+describe('it gets stuff', () => {
+
+    it('gets the object from file', done => {
+
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const idObject = objSaved._id;
+
+            store.get(idObject, (err, objFile) => {
+                if(err) return done(err);
+                assert.equal(obj.testing, objFile.testing);
+                done();
+            });
+        });
+
+
+
+
+
+    });
+
+
 });
