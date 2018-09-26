@@ -4,8 +4,9 @@ const path = require('path');
 const fs = require('fs');
 
 const rimraf = require('rimraf');
+const mkdirp = require('mkdirp');
 
-const store = require('../lib/store');
+const Store = require('../lib/store');
 
 
 
@@ -21,16 +22,28 @@ describe('it saves stuff', () => {
         });
     });
 
+    beforeEach(done => {
+        mkdirp(destPath, err => {
+            if(err) return done(err);
+            else done();
+        });
+    });
+
     it('saves the file', done => {
 
+        const store = new Store(sourcePath);
         const obj = { testing: [1, 1, 2, 3] };
         store.save(obj, (err, objSaved) => {
             if(err) return done(err);
             
-            const destFile = fs.readdirSync(destPath);
-            const objJSON = JSON.stringify(objSaved);
+            const savedPath = path.join(sourcePath, 'test');
+            console.log(savedPath);
+            const destFile = fs.readFileSync(savedPath);
+            console.log(objSaved);
+            console.log(destFile);
 
-            assert.equal(destFile, objJSON);
+            // const objJSON = JSON.stringify(objSaved);
+            assert.equal(objSaved, destFile);
             done();
         });
     });

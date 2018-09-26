@@ -28,6 +28,7 @@
     "jest": "^23.6.0"
   },
   "dependencies": {
+    "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2"
   }
 }
