@@ -92,6 +92,18 @@ describe('creates file', () => {
 
         });
 
+        it('returns {removed: false} if passed an invalid id', done => {
+
+            const store = new Store(dbPath);
+            store.remove('badidtest', (err, status) => {
+                if(err) {
+                    assert.equal(status.removed, false);
+                    done();
+                }
+            });
+
+        });
+
     });
 
 });
