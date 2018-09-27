@@ -27,7 +27,7 @@ describe('creates file', () => {
             const store = new Store(dbPath);
             store.save({ animal: 'dog' }, (err, animal) => {
                 if(err) return done(err);
-        
+                console.log('animal', animal);
                 const file = fs.readFileSync(path.join(dbPath, `${animal._id}.json`), 'utf8');
                 assert.equal(JSON.parse(file).animal, 'dog');
                 done();
