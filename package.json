@@ -10,6 +10,10 @@
     "test": "npm run test:run",
     "start": "npm run test:run -- --watch"
   },
+
+  "jest": {
+    "watchPathIgnorePatterns": ["simpleDB"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MackenzieBerliner-Glasser/simple-database.git"
