@@ -242,9 +242,6 @@ describe('store tests', () => {
 
         it('removes a file and adds a new one with same id', done => {
 
-            // set up:
-            // write file1
-
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
 
@@ -257,10 +254,6 @@ describe('store tests', () => {
                     done();
                 });
             });
-
-
-
-
         });
     });
 
