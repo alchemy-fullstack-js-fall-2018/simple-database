@@ -11,6 +11,7 @@ describe('simple database of JSON files', () => {
     beforeEach(done => {
         rimraf(DATABASE_NAME, err => {
             if(err && err.code !== 'ENOENT') return done(err);
+            
             mkdirp(DATABASE_NAME, function(err) {
                 if(err) return done(err);
                 done(err);
@@ -42,13 +43,18 @@ describe('simple database of JSON files', () => {
 
     it('saves an object, removes it, then returns null when attempting to get it', (done) => {
         const objectToSave = { name: 'Ember' };
+
         store.save (objectToSave, (err, objectThatSaved) => {
             if(err) return done(err);
+
             store.remove(objectThatSaved._id, (err, statusObj) => {
                 if(err) return done(err);
+
                 assert.deepEqual(statusObj, { removed: true });
+
                 store.get('objectThatSaved._id', (err, objectFromFile) => {
                     if(err) return done(err);
+
                     assert.deepEqual(objectFromFile, null);
                     done();
                 });
@@ -73,15 +79,25 @@ describe('simple database of JSON files', () => {
     });
 
     it('getAll returns an array of all objects in the store', (done) => {
-        store.save ({ name: 'Ember' }, (err) => {
+        store.save ({ name: 'Ember' }, (err, object1) => {
             if(err) return done(err);
-            store.save ({ name: 'Luna' }, (err) => {
+
+            store.save ({ name: 'Luna' }, (err, object2) => {
                 if(err) return done(err);
-                store.save ({ name: 'Smooch' }, (err) => {
+
+                store.save ({ name: 'Smooch' }, (err, object3) => {
                     if(err) return done(err);
+
                     store.getAll((err, objects) => {
                         if(err) return done(err);
-                        assert.equal(objects.length, 3);
+
+                        const expectedObjects = [object1, object2, object3].sort ((a, b) => {
+                            if(a._id > b._id) return 1;
+                            if(a._id < b._id) return -1;
+                            return 0;
+                        });
+
+                        assert.deepEqual(objects, expectedObjects);
                         done();
                     });
                 });
