@@ -46,6 +46,15 @@ describe('creates file', () => {
             });
         });
 
+        it('returns null if no file with id exists', done => {
+            const store = new Store(dbPath);
+            store.get('afgo9GhVJ123', (err, animal) => {
+                if(err) return done(err);
+                assert.deepEqual(animal, null);
+                done();
+            });
+        });
+
     });
 
 });
