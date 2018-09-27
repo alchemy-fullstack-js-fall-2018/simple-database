@@ -26,7 +26,6 @@ describe('creates file', () => {
             const store = new Store(dbPath);
             store.save({ animal: 'dog' }, (err, animal) => {
                 if(err) return done(err);
-                console.log('animal', animal);
                 const file = fs.readFileSync(path.join(dbPath, `${animal._id}.json`), 'utf8');
                 assert.equal(JSON.parse(file).animal, 'dog');
                 done();
@@ -42,8 +41,7 @@ describe('creates file', () => {
             const store = new Store(dbPath);
             store.get('afgo9GhVJS', (err, animal) => {
                 if(err) return done(err);
-                console.log('animal', animal);
-                assert.deepEqual(JSON.parse(animal.animal, 'dog'));
+                assert.deepEqual(animal.animal, 'cat');
                 done();
             });
         });
