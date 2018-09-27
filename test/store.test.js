@@ -183,6 +183,16 @@ describe('store tests', () => {
             });
         });
 
+        it('returns an empty array if the files do not exist', done => {
+
+            const store = new Store(dbPath);
+
+            store.getAll((err, objArr) => {
+                if(err) return done(err);
+                assert.equal(objArr.length, 0);
+                done();
+            });
+        });
 
     });
     
