@@ -139,6 +139,24 @@ describe('it removes stuff', () => {
             assert.equal(removedObj.removed, false);
             done();
         });
+    });
+
+    it('actually removed the file, per the get method', done => {
+        
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const idObject = objSaved._id;
+            store.remove(idObject, (err) => {
+                if(err) return done(err);
+            });
+            store.get(idObject, (err, objFile) => {
+                if(err && err.code !== 'ENOENT') return done(err);
+                assert.equal(objFile, null);
+                done();
+            });
+        });
 
 
     });
