@@ -45,8 +45,9 @@ describe('store', () => {
         store.save({ 'test':'sloth' }, (err, itemSaved) => {
             if(err) return done(err);
             store.get(itemSaved._id, (err, item) => {
+                if(err) return done(err);
                 assert.ok(item._id);
-                assert.deepEqual({ '_id': item._id, 'test':'sloth' }, item);
+                assert.deepEqual(item, { '_id': item._id, 'test':'sloth' });
                 done();
             }); 
         });
@@ -56,9 +57,45 @@ describe('store', () => {
         const store = new Store(databasePath);
         store.get('badId', (err, item) => {
             if(err && err.code !== 'ENOENT') return done(err);
-            assert.equal(null, item);
+            assert.equal(item, null);
             done();
         });
+    });
 
+    it('returns true if the file is removed', done => {
+        const store = new Store(databasePath);
+        store.save({ 'test':'sloth' }, (err, itemSaved) => {
+            if(err) return done(err);
+            store.remove(itemSaved._id, (err, item) => {
+                if(err) return done(err);
+                assert.equal(item.removed, true);
+                done();
+            }); 
+        });
+    });
+
+    it('returns false if file does not exist', done => {
+        const store = new Store(databasePath);
+        store.remove('badId', (err, item) => {
+            if(err && err.code !== 'ENOENT') return done(err);
+            assert.equal(item.removed, false);
+            done();
+        });
+    });
+
+    it('proves file is actually removed by the get method', done => {
+        const store = new Store(databasePath);
+        store.save({ 'test':'sloth' }, (err, itemSaved) => {
+            if(err) return done(err);
+            store.remove(itemSaved._id, (err) => {
+                if(err) return done(err);
+                store.get(itemSaved._id, (err, item) => {
+                    if(err && err.code !== 'ENOENT') return done(err);
+                    console.log(item);
+                    assert.equal(item, null);
+                    done();
+                });
+            }); 
+        });
     });
 });
