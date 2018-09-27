@@ -110,15 +110,18 @@ describe('creates file', () => {
 
         it('returns an array of all objects in directory', done => {
             const store = new Store(dbPath);
-            store.save({ animal: 'cat' }, (err, animal) => {
+            store.save({ animal: 'cat' }, (err, cat) => {
                 if(err) return done(err);
-                const file1 = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
-                store.save({ animal: 'dog' }, (err, animal) => {
+                store.save({ animal: 'dog' }, (err, dog) => {
                     if(err) return done(err);
-                    const file2 = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
-                    store.getAll(store, (err, animals) => {
+                    store.getAll((err, animals) => {
                         if(err) return done(err);
-                        assert.deepEqual(animals, [file1, file2]);
+                        const expected = [cat, dog].sort((a, b) => {
+                            if(a._id > b._id) return 1;
+                            if(a._id < b._id) return -1;
+                            return 0;
+                        });
+                        assert.deepEqual(animals, expected);
                         done();
                     });
                 });
