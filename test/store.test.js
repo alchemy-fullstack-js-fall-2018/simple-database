@@ -37,6 +37,7 @@ describe('store tests', () => {
 
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const testObject = objSaved;
@@ -46,8 +47,10 @@ describe('store tests', () => {
         });
 
         it('saves the object to a file', done => {
+
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const filename = objSaved._id + '.json';
@@ -60,8 +63,10 @@ describe('store tests', () => {
         });
 
         it('gives the object an _id property', done => {
+
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const idObject = objSaved._id;
@@ -71,8 +76,10 @@ describe('store tests', () => {
         });
 
         it('saves to path with same name as _id property', done => {
+
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const idObject = objSaved._id;
@@ -91,6 +98,7 @@ describe('store tests', () => {
 
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const idObject = objSaved._id;
@@ -105,6 +113,7 @@ describe('store tests', () => {
         it('returns null if object does not exist', done => {
 
             const store = new Store(dbPath);
+
             store.get('bad', (err, objFile) => {
                 if(err && err.code !== 'ENOENT') return done(err);
                 assert.equal(objFile, null);
@@ -120,6 +129,7 @@ describe('store tests', () => {
 
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const idObject = objSaved._id;
@@ -134,6 +144,7 @@ describe('store tests', () => {
         it('returns a false remove status if no file to remove', done => {
 
             const store = new Store(dbPath);
+            
             store.remove('bad', (err, removedObj) => {
                 if(err && err.code !== 'ENOENT') return done(err);
                 assert.equal(removedObj.removed, false);
@@ -145,6 +156,7 @@ describe('store tests', () => {
 
             const store = new Store(dbPath);
             const obj = { testing: [1, 1, 2, 3] };
+
             store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
                 const idObject = objSaved._id;
@@ -186,7 +198,6 @@ describe('store tests', () => {
         it('returns an empty array if the files do not exist', done => {
 
             const store = new Store(dbPath);
-
             store.getAll((err, objArr) => {
                 if(err) return done(err);
                 assert.equal(objArr.length, 0);
