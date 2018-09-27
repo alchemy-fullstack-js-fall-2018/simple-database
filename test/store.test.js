@@ -61,9 +61,9 @@ describe('creates file', () => {
 
         it('removes file with a provided id', done => {
             const store = new Store(dbPath);
-            store.remove('_MC-cz_PB', (err, status) => {
+            store.remove('_2VzFONhG', (err, status) => {
                 if(err) return done(err);
-                assert.deepEqual(status.removed, true);
+                assert.equal(status.removed, true);
                 done();
             });
         });
