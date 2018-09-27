@@ -43,8 +43,17 @@ describe('stores and retrieves objects from filesystem', () => {
             done();
         });
     });
-    
-    
+
+    it('this will remove a file by id and return true', (done) => {
+        store.save({ fruits: 'apple' }, (error, fruit) => {
+            if(error) done(error);
+            store.remove(fruit._id, (err, object) => {
+                if(error) return done(error);
+                assert.equal(object.removed, true);
+            });
+            done();
+        });
+    });
 });
 
 
