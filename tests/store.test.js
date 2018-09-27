@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const Store = require('../lib/store');
 
-const dbPath = path.join(__dirname, 'sandwiches')
+const dbPath = path.join(__dirname, 'sandwiches');
 
 describe('save', () => {
     it('should add an id to a sandwich', done => {
@@ -19,8 +19,20 @@ describe('save', () => {
         let store = new Store(dbPath);
         store.save({ sandwich: 'Hoagie' }, (err, sandwich) => {
             if(err) return done(err);
-            const file = fs.readFileSync(path.join(dbPath, `${sandwich._id}.json`), 'utf8');            
-            assert.equal(JSON.parse(file).sandwich, 'Hoagie');
+            const fileToSave = fs.readFileSync(path.join(dbPath, `${sandwich._id}.json`), 'utf8');            
+            assert.equal(JSON.parse(fileToSave).sandwich, 'Hoagie');
+            done();
+        });
+    });
+});
+
+describe('get', () => {
+    it('should return an object whose path is a given id', done => {
+        let store = new Store(dbPath);
+        store.get('bnU_Ef6N7', (err, sandwich) => {
+            if(err) return done(err);
+            const fileToGet = fs.readFileSync(path.join(dbPath, 'bnU_Ef6N7.json'), 'utf8');
+            assert.deepEqual(JSON.parse(sandwich), fileToGet);
             done();
         });
     });
