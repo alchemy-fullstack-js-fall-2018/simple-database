@@ -106,4 +106,25 @@ describe('creates file', () => {
 
     });
 
+    describe('getAll method', () => {
+
+        it('returns an array of all objects in directory', done => {
+            const store = new Store(dbPath);
+            store.save({ animal: 'cat' }, (err, animal) => {
+                if(err) return done(err);
+                const file1 = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
+                store.save({ animal: 'dog' }, (err, animal) => {
+                    if(err) return done(err);
+                    const file2 = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
+                    store.getAll((err, animals) => {
+                        if(err) return done(err);
+                        assert.deepEqual(animals.animal, [file1, file2]);
+                        done();
+                    });
+                });
+            });
+        });
+
+    });
+
 });
