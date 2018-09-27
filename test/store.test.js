@@ -112,7 +112,7 @@ describe('it gets stuff', () => {
 
         const store = new Store(dbPath);
         store.get('', (err, objFile) => {
-            if(err) return done(err);
+            if(err && err.code !== 'ENOENT') return done(err);
             assert.equal(null, objFile);
             done();
         });
