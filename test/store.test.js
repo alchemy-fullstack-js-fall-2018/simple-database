@@ -52,7 +52,7 @@ describe('it saves stuff', () => {
             const savedPath = path.join(dbPath, filename);
             const destFile = fs.readFileSync(savedPath, 'utf8');
             const destObj = JSON.parse(destFile);
-            assert.deepEqual(objSaved.testing, destObj.testing);
+            assert.deepEqual(destObj.testing, objSaved.testing);
             done();
         });
     });
@@ -95,7 +95,7 @@ describe('it gets stuff', () => {
             const idObject = objSaved._id;
             store.get(idObject, (err, objFile) => {
                 if(err) return done(err);
-                assert.deepEqual(obj.testing, objFile.testing);
+                assert.deepEqual(objFile.testing, obj.testing);
                 done();
             });
         });
@@ -104,12 +104,31 @@ describe('it gets stuff', () => {
     it('returns null if object does not exist', done => {
 
         const store = new Store(dbPath);
-        store.get('', (err, objFile) => {
+        store.get('bad', (err, objFile) => {
             if(err && err.code !== 'ENOENT') return done(err);
-            assert.equal(null, objFile);
+            assert.equal(objFile, null);
             done();
         });
     });
+});
 
+describe('it removes stuff', () => {
+
+    pretest();
+
+    it('removes a file of the id given if it exists', done => {
+
+        const store = new Store(dbPath);
+        const obj = { testing: [1, 1, 2, 3] };
+        store.save(obj, (err, objSaved) => {
+            if(err) return done(err);
+            const idObject = objSaved._id;
+            store.remove(idObject, (err, removedObj) => {
+                if(err) return done(err);
+                assert.equal(removedObj.removed, true);
+                done();
+            });
+        });
+    });
 
 });
