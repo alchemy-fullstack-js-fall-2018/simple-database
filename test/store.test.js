@@ -39,10 +39,14 @@ describe('creates file', () => {
 
         it('returns an object for a file based on provided id', done => {
             const store = new Store(dbPath);
-            store.get('afgo9GhVJS', (err, animal) => {
+            store.save({ animal: 'cat' }, (err, animal) => {
                 if(err) return done(err);
-                assert.deepEqual(animal.animal, 'cat');
-                done();
+                const file = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
+                store.get(file._id, (err, animal) => {
+                    if(err) return done(err);
+                    assert.deepEqual(animal.animal, 'cat');
+                    done();
+                });
             });
         });
 
@@ -60,12 +64,18 @@ describe('creates file', () => {
     describe('remove method', () => {
 
         it('removes file with a provided id', done => {
+
             const store = new Store(dbPath);
-            store.remove('_2VzFONhG', (err, status) => {
+            store.save({ animal: 'dog' }, (err, animal) => {
                 if(err) return done(err);
-                assert.equal(status.removed, true);
-                done();
+                const file = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
+                store.remove(file._id, (err, status) => {
+                    if(err) return done(err);
+                    assert.equal(status.removed, true);
+                    done();
+                });
             });
+
         });
 
     });
