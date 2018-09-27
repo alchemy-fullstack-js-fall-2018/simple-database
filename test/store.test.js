@@ -27,11 +27,7 @@ describe('store tests', () => {
         });
     });
 
-
-
-
     describe('it saves stuff', () => {
-
 
         it('returns the passed in object', done => {
 
@@ -93,7 +89,6 @@ describe('store tests', () => {
 
     describe('it gets stuff', () => {
 
-
         it('gets the object from file', done => {
 
             const store = new Store(dbPath);
@@ -123,7 +118,6 @@ describe('store tests', () => {
     });
 
     describe('it removes stuff', () => {
-
 
         it('returns a true remove status if it removes the file', done => {
 
