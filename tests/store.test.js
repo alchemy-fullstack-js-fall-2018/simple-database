@@ -32,7 +32,7 @@ describe('get', () => {
         store.get('bnU_Ef6N7', (err, sandwich) => {
             if(err) return done(err);
             const fileToGet = fs.readFileSync(path.join(dbPath, 'bnU_Ef6N7.json'), 'utf8');
-            assert.deepEqual(JSON.parse(sandwich), fileToGet);
+            assert.deepEqual(sandwich, JSON.parse(fileToGet));
             done();
         });
     });
