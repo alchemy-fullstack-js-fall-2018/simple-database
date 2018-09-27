@@ -59,18 +59,9 @@ describe('creates file', () => {
     
     describe('remove method', () => {
 
-        it('removes a file with provided id', done => {
+        it('removes file with a provided id', done => {
             const store = new Store(dbPath);
-            store.get('afgo9GhVJS', (err, animal) => {
-                if(err) return done(err);
-                assert.deepEqual(animal.animal, 'cat');
-                done();
-            });
-        });
-
-        it('returns null if no file with id exists', done => {
-            const store = new Store(dbPath);
-            store.get('_afAiAh191', (err, status) => {
+            store.remove('_MC-cz_PB', (err, status) => {
                 if(err) return done(err);
                 assert.deepEqual(status.removed, true);
                 done();
