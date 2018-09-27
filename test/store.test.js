@@ -91,7 +91,6 @@ describe('store', () => {
                 if(err) return done(err);
                 store.get(itemSaved._id, (err, item) => {
                     if(err && err.code !== 'ENOENT') return done(err);
-                    console.log(item);
                     assert.equal(item, null);
                     done();
                 });
