@@ -46,17 +46,17 @@ describe('Store Database', () => {
     it('removes a file by id and returns true', done => {
         store.save({ file: 'file contents' }, (err, object) => {
             if(err) done(err);
-            store.remove(object._id, (err, objectFromFile) => {
+            store.remove(object._id, (err, object) => {
                 if(err) return done(err);
-                assert.equal(objectFromFile.removed, true);
+                assert.equal(object.removed, true);
             }); 
             done();
         });
     });
 
     it('removes a file and returns false if does not exist', done => {
-        store.remove(null, (err, objectFromFile) => {
-            err ? done(err) : assert.equal(objectFromFile.removed, false);
+        store.remove(null, (err, object) => {
+            err ? done(err) : assert.equal(object.removed, false);
             done();
         }); 
     });
