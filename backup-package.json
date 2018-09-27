@@ -1,0 +1,30 @@
+{
+  "name": "array-methods",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miloofcroton/array-methods.git"
+  },
+  "author": "Jack Toumey <jack@toumey.io>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miloofcroton/array-methods/issues"
+  },
+  "homepage": "https://github.com/miloofcroton/array-methods#readme",
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "jest": "^23.6.0"
+  }
+}
