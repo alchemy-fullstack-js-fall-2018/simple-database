@@ -242,7 +242,25 @@ describe('store tests', () => {
 
         it('removes a file and adds a new one with same id', done => {
 
-            
+            // set up:
+            // write file1
+
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                objSaved.testing.push(5);
+                store.update(objSaved, (err, updatedObj) => {
+                    if(err) return done(err);
+                    assert.deepEqual(updatedObj, objSaved);
+                    done();
+                });
+            });
+
+
+
+
         });
     });
 
