@@ -116,7 +116,7 @@ describe('it removes stuff', () => {
 
     pretest();
 
-    it('removes a file of the id given if it exists', done => {
+    it('returns a remove status if it removes the file', done => {
 
         const store = new Store(dbPath);
         const obj = { testing: [1, 1, 2, 3] };
