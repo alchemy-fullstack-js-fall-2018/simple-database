@@ -30,7 +30,7 @@ describe('Store Database', () => {
         store.save({ file: 'file contents' }, (err, object) => {
             if(err) return done(err);
             store.get((object._id), (err, parsed) => {
-                err ? done(err) : assert.deepEqual(object.id, parsed.id);
+                err ? done(err) : assert.deepEqual(object, parsed);
             });
             done();
         });
