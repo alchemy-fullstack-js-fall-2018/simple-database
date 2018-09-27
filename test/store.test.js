@@ -10,7 +10,7 @@ const Store = require('../lib/store');
 
 const dbPath = path.join(__dirname, 'simpleDB');
 
-describe('it saves stuff', () => {
+const pretest = () => {
 
     beforeEach(done => {
         rimraf(dbPath, err => {
@@ -25,6 +25,11 @@ describe('it saves stuff', () => {
             else done();
         });
     });
+};
+
+describe('it saves stuff', () => {
+
+    pretest();
 
     it('returns the passed in object', done => {
 
@@ -79,19 +84,7 @@ describe('it saves stuff', () => {
 
 describe('it gets stuff', () => {
 
-    beforeEach(done => {
-        rimraf(dbPath, err => {
-            if(err && err.code !== 'ENOENT') done(err);
-            else done();
-        });
-    });
-
-    beforeEach(done => {
-        mkdirp(dbPath, err => {
-            if(err) return done(err);
-            else done();
-        });
-    });
+    pretest();
 
     it('gets the object from file', done => {
 
