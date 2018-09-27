@@ -14,6 +14,9 @@
     "type": "git",
     "url": "git+https://github.com/MikeBLambert/simple-database.git"
   },
+  "jest": {
+    "watchPathIgnorePatterns": ["book-dir-dest"]
+  },
   "author": "Mike Lambert <mlamb128@gmail.com>",
   "license": "ISC",
   "bugs": {
