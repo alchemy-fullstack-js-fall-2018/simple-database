@@ -31,9 +31,6 @@ describe('store', () => {
             if(err) return done(err);
             const file = fs.readFileSync(path.join(dbPath, '_-LlzgkyC.json'), 'utf8');
             assert.deepEqual(dinosaur, JSON.parse(file));
-
         });
-
-
     });
 });
