@@ -32,7 +32,6 @@ describe('Store Database', () => {
             done();
             store.get((object._id), (err, objectFromFile) => {
                 err ? done(err) : assert.deepEqual(object.id, objectFromFile);
-                done();
             });
         });
     });
@@ -50,7 +49,6 @@ describe('Store Database', () => {
             store.remove(object._id, (err, objectFromFile) => {
                 if(err) return done(err);
                 assert.equal(objectFromFile.removed, true);
-                done();
             }); 
         });
     });
@@ -60,6 +58,16 @@ describe('Store Database', () => {
             err ? done(err) : assert.equal(objectFromFile.removed, false);
             done();
         }); 
+    });
+
+    it('gets all items in an array', done => {
+        store.save({ file: 'file contents' }, (err) => {
+            err ? done(err) : done();
+            store.getAll((err, array) => {
+                if(err) return done(err);
+                assert.equal(array.length, 1);
+            });
+        });
     });
 
 });
