@@ -11,7 +11,7 @@ describe('simple database of JSON files', () => {
     beforeEach(done => {
         rimraf(DATABASE_NAME, err => {
             if(err && err.code !== 'ENOENT') return done(err);
-            
+
             mkdirp(DATABASE_NAME, function(err) {
                 if(err) return done(err);
                 done(err);
@@ -23,10 +23,13 @@ describe('simple database of JSON files', () => {
         const objectToSave = { name: 'Ember' };
         store.save (objectToSave, (err, objectThatSaved) => {
             if(err) return done(err);
+
             const hasId = objectThatSaved.hasOwnProperty('_id');
             assert.deepEqual(hasId, true);
+
             store.get(objectThatSaved._id, (err, objectFromFile) => {
                 if(err) return done(err);
+
                 assert.deepEqual(objectFromFile, objectThatSaved);
                 done();
             });
@@ -36,6 +39,7 @@ describe('simple database of JSON files', () => {
     it('returns null when attempting to get file that doesn\'t exist', (done) => {
         store.get('DoesNotExist', (err, objectFromFile) => {
             if(err) return done(err);
+            
             assert.deepEqual(objectFromFile, null);
             done();
         });
@@ -65,6 +69,7 @@ describe('simple database of JSON files', () => {
     it('returns false object when attempting to remove file that doesn\'t exist', done => {
         store.remove('DoesNotExist', (err, statusObj) => {
             if(err) return done(err);
+
             assert.deepEqual(statusObj, { removed: false });
             done();
         });
@@ -73,6 +78,7 @@ describe('simple database of JSON files', () => {
     it('getAll returns an empty array when no objects exist', (done) => {
         store.getAll((err, objects) => {
             if(err) return done(err);
+
             assert.deepEqual(objects, []);
             done();
         });
