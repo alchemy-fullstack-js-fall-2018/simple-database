@@ -30,6 +30,7 @@ describe('creates file', () => {
         
                 const file = fs.readFileSync(path.join(dbPath, `${animal._id}.json`), 'utf8');
                 assert.equal(JSON.parse(file).animal, 'dog');
+                done();
             });
             
         });
