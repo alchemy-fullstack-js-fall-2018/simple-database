@@ -1,7 +1,0 @@
-storableWhale => {
-            if (error) {
-                callback(error);
-            } else {
-                callback(null, whale);
-            }
-        }
