@@ -71,5 +71,12 @@ describe('Store Database', () => {
             done();
         });
     });
+    it('returns an empty array when getAll finds nothing', (done) => {
+        store.getAll((err, objects) => {
+            if(err) return done(err);
+            assert.deepEqual(objects, []);
+            done();
+        });
+    });
 
 });
