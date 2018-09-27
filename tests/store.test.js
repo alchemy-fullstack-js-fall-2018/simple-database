@@ -41,9 +41,9 @@ describe('get', () => {
         let store = new Store(dbPath);
         let badId = 'some bad id';
         store.get(badId, (err, sandwich) => {
-            if(err) return done(err);
-            const fileToGet = fs.readFileSync(path.join(dbPath, badId), 'utf8');
-            assert.equal('some bad id', null);
+            if(err && err.code !== 'ENOENT') done(err);
+            assert.equal(sandwich, null);
+            done();
         });
     });
 });
