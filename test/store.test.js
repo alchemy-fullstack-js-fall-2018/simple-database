@@ -8,10 +8,10 @@ const Store = require('../lib/store');
 
 describe('creates file', () => {
     
+    const dbPath = path.join(__dirname, 'animals');
+
     describe('save method', () => {
         
-        const dbPath = path.join(__dirname, 'animals');
-
         it('adds an id to an object', done => {
             const store = new Store(dbPath);
             store.save({ animal: 'dog' }, (err, animal) => {
@@ -32,6 +32,20 @@ describe('creates file', () => {
                 done();
             });
             
+        });
+
+    });
+
+    describe('get method', () => {
+
+        it('returns an object for a file based on provided id', done => {
+            const store = new Store(dbPath);
+            store.get('afgo9GhVJS', (err, animal) => {
+                if(err) return done(err);
+                console.log('animal', animal);
+                assert.deepEqual(JSON.parse(animal.animal, 'dog'));
+                done();
+            });
         });
 
     });
