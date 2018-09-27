@@ -1,0 +1,41 @@
+{
+  "name": "weird-copy-coolness",
+  "version": "1.0.1",
+  "description": "Who put these things together?",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test:run": "jest",
+    "test": "npm run test:run",
+    "start": "npm run test:run -- --watch"
+  },
+  "author": "Marty Nelson <marty@martypdx.com>",
+  "license": "ISC",
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "shortid": "^2.2.13",
+    "superagent": "^4.0.0-beta.5"
+  },
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "jest": "^23.6.0",
+    "rimraf": "^2.6.2"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+
+  "jest": {
+    "watchPathIgnorePatterns": ["database"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sophiegraham/simple-database.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sophiegraham/simple-database/issues"
+  },
+  "homepage": "https://github.com/sophiegraham/simple-database#readme"
+}
