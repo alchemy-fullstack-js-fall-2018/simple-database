@@ -1,6 +1,5 @@
 const path = require('path');
 const assert = require('assert');
-// const fs = require('fs');
 const Store = require('../lib/store');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
@@ -23,15 +22,49 @@ describe('stores and retrieves objects from filesystem', () => {
 
     it('this should save directory from root to destination with id', (done) => {
         store.save({ fruits: 'apple' }, (error, fruit) => {
-            if(error) {
-                done(error);             
-            } else {
-                assert.ok(fruit._id);
-                done();
-
-                // const file = fs.readFileSync(path.join(rootPath, `${fruits._id}.json`, 'utf8'));
-            }
+            error ? done(error) : assert.ok(fruit._id);
+            done();
         });
     });
+
+    it('this gets file by id', (done) => {
+        store.save({ fruits: 'apple' }, (error, fruit) => {
+            if(error) return done(error);
+            store.get((fruit._id), (error, fruitObject) => {
+                error ? done (error) : assert.deepEqual(fruit, fruitObject);
+            });
+            done();
+        });
+    });
+
+    it('this will test give me a mismatched id', (done) => {
+        store.get((null), (err) => {
+            err !== null ? done(err) : assert.equal(err, null);
+            done();
+        });
+    });
+    
+    
 });
+
+
+
+
+// .get(<id>, <callback(error, objectFromFile)>)
+// Takes a callback which takes an error and the deserialized (JSON.parse) object that has that id
+// If an object with that id does not exists, objectFromFile is null
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
