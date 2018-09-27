@@ -116,9 +116,9 @@ describe('creates file', () => {
                 store.save({ animal: 'dog' }, (err, animal) => {
                     if(err) return done(err);
                     const file2 = JSON.parse(fs.readFileSync(path.join(dbPath, `${animal._id}.json`)), 'utf8');
-                    store.getAll((err, animals) => {
+                    store.getAll(store, (err, animals) => {
                         if(err) return done(err);
-                        assert.deepEqual(animals.animal, [file1, file2]);
+                        assert.deepEqual(animals, [file1, file2]);
                         done();
                     });
                 });
