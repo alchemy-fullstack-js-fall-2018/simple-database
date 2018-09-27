@@ -29,8 +29,8 @@ describe('Store Database', () => {
     it('gets file by id', done => {
         store.save({ file: 'file contents' }, (err, object) => {
             if(err) return done(err);
-            store.get((object._id), (err, objectFromFile) => {
-                err ? done(err) : assert.deepEqual(object.id, objectFromFile.id);
+            store.get((object._id), (err, parsed) => {
+                err ? done(err) : assert.deepEqual(object.id, parsed.id);
             });
             done();
         });
