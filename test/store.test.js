@@ -3,12 +3,26 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const Store = require('../lib/store');
+const rimraf = require('rimraf');
+const mkdirp = require('mkdirp');
 
 
 
 describe('creates file', () => {
     
     const dbPath = path.join(__dirname, 'animals');
+
+    beforeEach(done => {
+        rimraf(dbPath, err => {
+            if(err && err.code !== 'ENOENT') done(err);
+            else {
+                mkdirp(dbPath, err => {
+                    if(err) return done(err);
+                    else done();
+                });
+            }
+        });
+    });
 
     describe('save method', () => {
         
