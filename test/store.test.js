@@ -1,15 +1,39 @@
 
 const assert = require('assert');
-// const fs = require('fs');
-// const path = require('path');
+const fs = require('fs');
+const path = require('path');
 const Store = require('../lib/store');
 
 
 
-describe('create file', () => {
-    it('creates a file name: <shortid>.json', () => {
-        const store = new Store;
-        const randomName = store.newFile();
-        assert(randomName.endsWith('.json'), 'file name ends with .json');
+describe('creates file', () => {
+    
+    
+    describe('save method', () => {
+        
+        const dbPath = path.join(__dirname, 'animals');
+
+        it('adds an id to an object', done => {
+            const store = new Store(dbPath);
+            store.save({ animal: 'dog' }, (err, animal) => {
+                if(err) return done(err);
+                
+                assert.ok(animal._id);
+                done();
+            });
+        });
+        
+        it('saves the object to a file with a name of <_id>.json', done => {
+            const store = new Store(dbPath);
+            store.save({ animal: 'dog' }, (err, animal) => {
+                if(err) return done(err);
+        
+                const file = fs.readFileSync(path.join(dbPath, `${animal._id}.json`), 'utf8');
+                assert.equal(JSON.parse(file).animal, 'dog');
+            });
+            
+        });
+
     });
+
 });
