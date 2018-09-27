@@ -144,7 +144,7 @@ describe('store tests', () => {
         it('returns a false remove status if no file to remove', done => {
 
             const store = new Store(dbPath);
-            
+
             store.remove('bad', (err, removedObj) => {
                 if(err && err.code !== 'ENOENT') return done(err);
                 assert.equal(removedObj.removed, false);
@@ -235,6 +235,14 @@ describe('store tests', () => {
                     }
                 });
             });
+        });
+    });
+
+    describe('it updates a file', () => {
+
+        it('removes a file and adds a new one with same id', done => {
+
+            
         });
     });
 
