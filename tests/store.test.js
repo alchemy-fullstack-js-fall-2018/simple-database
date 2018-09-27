@@ -36,4 +36,14 @@ describe('get', () => {
             done();
         });
     });
+
+    it('should return null if passed a bad id', done => {
+        let store = new Store(dbPath);
+        let badId = 'some bad id';
+        store.get(badId, (err, sandwich) => {
+            if(err) return done(err);
+            const fileToGet = fs.readFileSync(path.join(dbPath, badId), 'utf8');
+            assert.equal('some bad id', null);
+        });
+    });
 });
