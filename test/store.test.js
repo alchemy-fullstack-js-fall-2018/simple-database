@@ -73,15 +73,14 @@ describe('simple database of JSON files', () => {
     });
 
     it('getAll returns an array of all objects in the store', (done) => {
-        store.save ({ name: 'Ember' }, (err, object1) => {
+        store.save ({ name: 'Ember' }, (err) => {
             if(err) return done(err);
-            store.save ({ name: 'Luna' }, (err, object2) => {
+            store.save ({ name: 'Luna' }, (err) => {
                 if(err) return done(err);
-                store.save ({ name: 'Smooch' }, (err, object3) => {
+                store.save ({ name: 'Smooch' }, (err) => {
                     if(err) return done(err);
                     store.getAll((err, objects) => {
                         if(err) return done(err);
-                        //assert.deepEqual(objects, [object1, object2, object3]);
                         assert.equal(objects.length, 3);
                         done();
                     });
