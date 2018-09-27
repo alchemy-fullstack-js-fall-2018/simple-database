@@ -22,7 +22,17 @@ describe('save', () => {
             if(error) return done(error);
             const file = fs.readFileSync(path.join(dbPath, `${whale._id}.json`), 'utf8');
             console.log('file', file);
-            assert.equal(JSON.parse(file).species, 'Blue Whale');
+            assert.equal(whale.species, JSON.parse(file).species);
+            done();
+        });
+    });
+
+    it('gets a whale??', done => {
+        const store = new Store(path.join(dbPath));
+        store.get('_P3o3FtkPt', (error, whale) => {
+            if(error) return done(error);
+            const file = fs.readFileSync(path.join(dbPath, '_P3o3FtkPt.json'), 'utf8');
+            assert.deepEqual(whale, JSON.parse(file));
             done();
         });
     });
