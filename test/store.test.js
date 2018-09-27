@@ -8,7 +8,6 @@ const Store = require('../lib/store');
 
 describe('creates file', () => {
     
-    
     describe('save method', () => {
         
         const dbPath = path.join(__dirname, 'animals');
