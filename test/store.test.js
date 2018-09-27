@@ -8,9 +8,10 @@ const mkdirp = require('mkdirp');
 
 const Store = require('../lib/store');
 
-const dbPath = path.join(__dirname, 'simpleDB');
 
-const pretest = () => {
+describe('store tests', () => {
+
+    const dbPath = path.join(__dirname, 'simpleDB');
 
     beforeEach(done => {
         rimraf(dbPath, err => {
@@ -25,140 +26,192 @@ const pretest = () => {
             else done();
         });
     });
-};
 
-describe('it saves stuff', () => {
 
-    pretest();
 
-    it('returns the passed in object', done => {
 
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const testObject = objSaved;
-            assert.deepEqual(testObject['testing'], [1, 1, 2, 3]);
-            done();
-        });
-    });
+    describe('it saves stuff', () => {
 
-    it('saves the object to a file', done => {
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const filename = objSaved._id + '.json';
-            const savedPath = path.join(dbPath, filename);
-            const destFile = fs.readFileSync(savedPath, 'utf8');
-            const destObj = JSON.parse(destFile);
-            assert.deepEqual(destObj.testing, objSaved.testing);
-            done();
-        });
-    });
 
-    it('gives the object an _id property', done => {
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const idObject = objSaved._id;
-            assert.equal(typeof idObject, 'string');
-            done();
-        });
-    });
+        it('returns the passed in object', done => {
 
-    it('saves to path with same name as _id property', done => {
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const idObject = objSaved._id;
-            const filename = idObject + '.json';
-            const dirObj = fs.readdirSync(dbPath);
-            assert.equal(filename, dirObj[0]);
-            done();
-        });
-    });
-});
-
-describe('it gets stuff', () => {
-
-    pretest();
-
-    it('gets the object from file', done => {
-
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const idObject = objSaved._id;
-            store.get(idObject, (err, objFile) => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
-                assert.deepEqual(objFile.testing, obj.testing);
+                const testObject = objSaved;
+                assert.deepEqual(testObject['testing'], [1, 1, 2, 3]);
+                done();
+            });
+        });
+
+        it('saves the object to a file', done => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                const filename = objSaved._id + '.json';
+                const savedPath = path.join(dbPath, filename);
+                const destFile = fs.readFileSync(savedPath, 'utf8');
+                const destObj = JSON.parse(destFile);
+                assert.deepEqual(destObj.testing, objSaved.testing);
+                done();
+            });
+        });
+
+        it('gives the object an _id property', done => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                const idObject = objSaved._id;
+                assert.equal(typeof idObject, 'string');
+                done();
+            });
+        });
+
+        it('saves to path with same name as _id property', done => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                const idObject = objSaved._id;
+                const filename = idObject + '.json';
+                const dirObj = fs.readdirSync(dbPath);
+                assert.equal(filename, dirObj[0]);
                 done();
             });
         });
     });
 
-    it('returns null if object does not exist', done => {
+    describe('it gets stuff', () => {
 
-        const store = new Store(dbPath);
-        store.get('bad', (err, objFile) => {
-            if(err && err.code !== 'ENOENT') return done(err);
-            assert.equal(objFile, null);
-            done();
-        });
-    });
-});
 
-describe('it removes stuff', () => {
+        it('gets the object from file', done => {
 
-    pretest();
-
-    it('returns a true remove status if it removes the file', done => {
-
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const idObject = objSaved._id;
-            store.remove(idObject, (err, removedObj) => {
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
                 if(err) return done(err);
-                assert.equal(removedObj.removed, true);
-                done();
+                const idObject = objSaved._id;
+                store.get(idObject, (err, objFile) => {
+                    if(err) return done(err);
+                    assert.deepEqual(objFile.testing, obj.testing);
+                    done();
+                });
             });
         });
-    });
 
-    it('returns a false remove status if no file to remove', done => {
+        it('returns null if object does not exist', done => {
 
-        const store = new Store(dbPath);
-        store.remove('bad', (err, removedObj) => {
-            if(err && err.code !== 'ENOENT') return done(err);
-            assert.equal(removedObj.removed, false);
-            done();
-        });
-    });
-
-    it('actually removed the file, per the get method', done => {
-        
-        const store = new Store(dbPath);
-        const obj = { testing: [1, 1, 2, 3] };
-        store.save(obj, (err, objSaved) => {
-            if(err) return done(err);
-            const idObject = objSaved._id;
-            store.remove(idObject, (err) => {
-                if(err) return done(err);
-            });
-            store.get(idObject, (err, objFile) => {
+            const store = new Store(dbPath);
+            store.get('bad', (err, objFile) => {
                 if(err && err.code !== 'ENOENT') return done(err);
                 assert.equal(objFile, null);
                 done();
             });
         });
+    });
+
+    describe('it removes stuff', () => {
+
+
+        it('returns a true remove status if it removes the file', done => {
+
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                const idObject = objSaved._id;
+                store.remove(idObject, (err, removedObj) => {
+                    if(err) return done(err);
+                    assert.equal(removedObj.removed, true);
+                    done();
+                });
+            });
+        });
+
+        it('returns a false remove status if no file to remove', done => {
+
+            const store = new Store(dbPath);
+            store.remove('bad', (err, removedObj) => {
+                if(err && err.code !== 'ENOENT') return done(err);
+                assert.equal(removedObj.removed, false);
+                done();
+            });
+        });
+
+        it('actually removed the file, per the get method', done => {
+
+            const store = new Store(dbPath);
+            const obj = { testing: [1, 1, 2, 3] };
+            store.save(obj, (err, objSaved) => {
+                if(err) return done(err);
+                const idObject = objSaved._id;
+                store.remove(idObject, (err) => {
+                    if(err) return done(err);
+                });
+                store.get(idObject, (err, objFile) => {
+                    if(err && err.code !== 'ENOENT') return done(err);
+                    assert.equal(objFile, null);
+                    done();
+                });
+            });
+        });
+    });
+
+    describe('it gets all the stuff', () => {
+
+        it('returns an array of objects if the files exist', done => {
+
+            const store = new Store(dbPath);
+            const objs = [        
+                { testing: [1, 1, 2, 3] }, 
+                { testing: [9, 9, 8, 7] }
+            ];
+
+            objs.forEach(obj => {
+                store.save(obj, (err) => {
+                    if(err) return done(err);
+                });
+            });
+
+            store.getAll((err, objArr) => {
+                if(err) return done(err);
+                assert.equal(objArr.length, objs.length);
+                done();
+            });
+        });
 
 
     });
+    
+    // describe('it gets an array of stuff', () => {
+
+    //     it('returns an array of objects if the files exist', done => {
+
+    //         const store = new Store(dbPath);
+    //         const objs = [        
+    //             { testing: [1, 1, 2, 3] }, 
+    //             { testing: [9, 9, 8, 7] }
+    //         ];
+    //         let ids = [];
+
+    //         objs.forEach(obj => {
+    //             store.save(obj, (err, objSaved) => {
+    //                 if(err) return done(err);
+    //                 ids.push(objSaved._id);
+    //             });
+    //         });
+
+    //         store.get(ids, (err, objFile) => {
+    //             if(err) return done(err);
+    //             assert.deepEqual(objFile.testing, obj.testing);
+    //             done();
+    //         });
+    //     });
+
+
+    // });
 
 });
