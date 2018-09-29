@@ -14,7 +14,7 @@ describe('store', () => {
 
         rimraf(dbPath, err => {
             if(err && err.code !== 'ENOENT') return done(err);
-        
+
             mkdirp(dbPath, err => {
                 if(err) return done(err);
                 done();
@@ -53,7 +53,7 @@ describe('store', () => {
             
             store.get(book.id, (err, existingBook) => {
                 if(err) return done(err);
-                assert.equal(existingBook.id, book.id);
+                assert.deepEqual(existingBook, book);
                 done();
             });
 
@@ -86,15 +86,21 @@ describe('store', () => {
         });
     });
 
-    it('gets all objects in database', done => {
-        const store = new Store(dbPath);
-        const dbContents = fs.readdir(dbPath);
+    it.only('gets all objects in database', done => {
+        const store = new Store(dbPath);       
         
-        store.getAll((err, arrOfObjs) => {
-            if(err) done(err);
-            assert.equal(arrOfObjs, dbContents);
+        store.save({ title: 'Moby Dick' }, (err, book1) => {
+            if(err) return done(err);
+
+            store.save({ title: 'Hunger Games' }, (err, book2) => {
+                if(err) return done(err);
+
+                store.getAll((err, arrOfObjs) => {
+                    if(err) done(err);
+                    assert.equal(arrOfObjs, [book1, book2]);
+                });
+            });
         });
     });
-
 });
 
