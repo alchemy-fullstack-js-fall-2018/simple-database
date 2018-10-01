@@ -1,12 +1,28 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+const rimraf = require('rimraf');
+const mkdirp = require('mkdirp');
 const Store = require('../lib/store');
 
 const dbPath = path.join(__dirname, 'sandwiches');
 
-describe('save', () => {
-    it('should add an id to a sandwich', done => {
+describe('store', () => {
+
+    beforeEach(done => {
+
+        rimraf(dbPath, err => {
+            if(err && err.code !== 'ENOENT') return done(err);
+
+            mkdirp(dbPath, err => {
+                if(err) return done(err);
+                done();
+            });
+        });
+
+    });
+
+    it('save should add an id to a sandwich', done => {
         let store = new Store(dbPath);
         store.save({ sandwich: 'Reuben' }, (err, sandwich) => {
             if(err) return done(err);
@@ -15,7 +31,7 @@ describe('save', () => {
         });        
     });
 
-    it('should write the object to a file', done => {
+    it('save should write the object to a file', done => {
         let store = new Store(dbPath);
         store.save({ sandwich: 'Hoagie' }, (err, sandwich) => {
             if(err) return done(err);
@@ -23,11 +39,9 @@ describe('save', () => {
             assert.equal(JSON.parse(fileToSave).sandwich, 'Hoagie');
             done();
         });
-    });
-});
-
-describe('get', () => {
-    it('should return an object whose path is a given id', done => {
+    });    
+    
+    it('get should return an object whose path is a given id', done => {
         let store = new Store(dbPath);
         store.get('bnU_Ef6N7', (err, sandwich) => {
             if(err) return done(err);
@@ -37,7 +51,7 @@ describe('get', () => {
         });
     });
 
-    it('should return null if passed a bad id', done => {
+    it('get should return null if passed a bad id', done => {
         let store = new Store(dbPath);
         let badId = 'some bad id';
         store.get(badId, (err, sandwich) => {
@@ -46,4 +60,18 @@ describe('get', () => {
             done();
         });
     });
+    
+
+    it('remove should remove an item with the corresponding id', done => {
+        let store = new Store(dbPath);
+        store.save({ sandwich: 'Tuna' }, (err, sandwich) => {
+            if(err) return done(err);
+            store.remove(sandwich._id, (err, removedSuccess) => {
+                if(err) return done(err);
+                assert.equal(removedSuccess.removed, true);
+                done();       
+            });
+        });
+    });
+
 });
