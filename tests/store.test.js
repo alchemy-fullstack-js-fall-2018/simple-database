@@ -66,7 +66,7 @@ describe('store', () => {
     });
     
 
-    it('remove should remove an item with the corresponding id', done => {
+    it.skip('remove should remove an item with the corresponding id', done => {
         let store = new Store(dbPath);
         store.save({ sandwich: 'Tuna' }, (err, sandwich) => {
             if(err) return done(err);
