@@ -1,0 +1,40 @@
+{
+  "name": "simple-database",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acrankin/simple-database.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acrankin/simple-database/issues"
+  },
+  "homepage": "https://github.com/acrankin/simple-database#readme",
+  "devDependencies": {
+    "eslint": "^5.6.0",
+    "jest": "^23.6.0",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "shortid": "^2.2.13",
+    "superagent": "^4.0.0-beta.5"
+  },
+  "jest": {
+    "watchPathIgnorePatterns": ["sandwiches"]
+  }
+}
