@@ -87,5 +87,25 @@ describe('store', () => {
                 done();
             }
         });
-    })
+    });
+
+    it('getAll should return an array of the objects in the directory', done => {
+        let store = new Store(dbPath);
+        store.save({ sandwich: 'Cucumber' }, (err, Cucumber) => {
+            if(err) return done(err);
+            store.save({ sandwich: 'Porchetta' }, (err, Porchetta) => {
+                if(err) return done(err);
+                store.getAll((err, sandwiches) => {
+                    if(err) return done(err);
+                    const expected = [Cucumber, Porchetta].sort((a, b) => {
+                        if(a._id > b._id) return 1;
+                        if(a._id < b._id) return -1;
+                        return 0;
+                    });
+                    assert.deepEqual(sandwiches, expected);
+                    done();
+                });
+            });
+        });
+    });
 });
