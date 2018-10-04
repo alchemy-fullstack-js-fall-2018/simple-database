@@ -66,16 +66,26 @@ describe('store', () => {
     });
     
 
-    it.skip('remove should remove an item with the corresponding id', done => {
+    it('remove should remove an item with the corresponding id', done => {
         let store = new Store(dbPath);
         store.save({ sandwich: 'Tuna' }, (err, sandwich) => {
             if(err) return done(err);
-            store.remove(sandwich._id, (err, removedSuccess) => {
+            const fileToRemove = JSON.parse(fs.readFileSync(path.join(dbPath, `${sandwich._id}.json`)), 'utf8');
+            store.remove(fileToRemove._id, (err, removedStatus) => {
                 if(err) return done(err);
-                assert.equal(removedSuccess.removed, true);
+                assert.equal(removedStatus.removed, true);
                 done();       
             });
         });
     });
 
+    it.skip('remove should return {removed: false} if passed a bad id', done => {
+        let store = new Store(dbPath);
+        store.remove('someBadID', (err, removedStatus) => {
+            if(err) {
+                assert.equal(removedStatus.removed, false);
+                done();
+            }
+        });
+    })
 });
