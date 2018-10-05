@@ -71,6 +71,7 @@ describe('store', () => {
         
         });
     });
+
     it('returns false on a bad id', done => {
         const store = new Store(path.join(dbPath));
     
@@ -80,6 +81,28 @@ describe('store', () => {
             done();
         }); 
         
+    });
+    it('this will get all my files', (done) => { 
+        const store = new Store(path.join(dbPath));
+
+        store.save({ dinosaurs: 'little foot' }, (err) => { 
+            if(err) done(err); 
+            store.getAll((err, array) => { 
+                if(err) return done(err); 
+                assert.equal(array.length, 1); 
+                done(); 
+            }); 
+        }); 
+    });
+
+    it('returns empty array if files do not exist', (done) => {
+        const store = new Store(path.join(dbPath));
+        
+        store.getAll((err, objects) => {
+            if(err) return done(err);
+            assert.deepEqual(objects, []);
+            done();
+        });
     });
 
 });
