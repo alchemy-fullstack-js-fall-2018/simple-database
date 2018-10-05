@@ -43,6 +43,43 @@ describe('store', () => {
                 done();
             }); 
         });
+    
+    });
+
+    it('returning null on bad id', done => {
+        const store = new Store(path.join(dbPath));
+
+        store.get('fake._id', (err, getDinosaur) => {
+            if(err) return done(err);
+            assert.deepEqual(getDinosaur, null);
+            done();
+        });
+    });
+
+    it('saves an object and then deletes it', done => {
+        const store = new Store(path.join(dbPath));
+
+        store.save({ name: 'little foot' }, (err, dinosaur) => {
+            if(err) return done(err);
+            
+            store.delete(dinosaur._id, (err, removed) => {
+                if(err) return done(err);
+                assert.deepEqual(removed, { removed: true });
+                done();
+            });
+            
+        
+        });
+    });
+    it('returns false on a bad id', done => {
+        const store = new Store(path.join(dbPath));
+    
+        store.delete('fake._id', (err, removed) => {
+            if(err) return done(err);
+            assert.deepEqual(removed, { removed: false });
+            done();
+        }); 
+        
     });
 
 });
