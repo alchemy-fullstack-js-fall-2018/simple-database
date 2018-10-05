@@ -11,18 +11,20 @@ describe('stores and retrieves objects from filesystem', () => {
 
     beforeEach(done => {
         return rimraf(rootPath, error => {
-            if(error && error.code !== 'ENOENT') done(error);
-            else done();
+            error && error.code !== 'ENOENT' ? done(error) : done();
         });
     });
     
-    beforeEach(() => {
-        return mkdirp(rootPath);
+    beforeEach((done) => {
+        return mkdirp(rootPath, () => {
+            done();
+        });
     });
 
     it('this should save directory from root to destination with id', (done) => {
         store.save({ fruits: 'apple' }, (error, fruit) => {
             error ? done(error) : assert.ok(fruit._id);
+            assert.equal(fruit.fruits, 'apple');
             done();
         });
     });
@@ -32,8 +34,8 @@ describe('stores and retrieves objects from filesystem', () => {
             if(error) return done(error);
             store.get((fruit._id), (error, fruitObject) => {
                 error ? done (error) : assert.deepEqual(fruit, fruitObject);
+                done();
             });
-            done();
         });
     });
 
@@ -50,18 +52,31 @@ describe('stores and retrieves objects from filesystem', () => {
             store.remove(fruit._id, (err, object) => {
                 if(error) return done(error);
                 assert.equal(object.removed, true);
+                done();
             });
+        });
+    });
+
+    it('this will get all my files', (done) => {
+        store.save({ fruits: 'apple' }, (err) => {
+            if(err) done(err);
+            store.getAll((err, array) => {
+                if(err) return done(err);
+                assert.equal(array.length, 1);
+                done();
+            });
+        });
+    });
+
+    it('returns an empty array when getAll finds nothing', (done) => {
+        store.getAll((err, objects) => {
+            if(err) return done(err);
+            assert.equal(objects.length, 0);
             done();
         });
     });
 });
 
-
-
-
-// .get(<id>, <callback(error, objectFromFile)>)
-// Takes a callback which takes an error and the deserialized (JSON.parse) object that has that id
-// If an object with that id does not exists, objectFromFile is null
 
 
 
